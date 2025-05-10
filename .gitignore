@@ -18,3 +18,4 @@ __pycache__/
 *.csv
 *.jsonl
 *.jsonl.gz
+test.py
