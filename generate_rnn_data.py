@@ -55,26 +55,29 @@ def run_inference(model, data_loader, device):
     return all_raw_preds, all_batch_meta
 
 def main(cfg, args):
-    if cfg['global']['device'] == 'auto':
+    if cfg['global']['device'] == 'auto': #nếu device = auto thì tự động chọn GPU nếu có, nếu không thì CPU
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
         device = torch.device(cfg['global']['device'])
-
+    # Đọc các tham số chính từ
     num_classes = cfg['global']['num_classes']
     window_size = cfg['global']['window_size']
     dl_cfg = cfg['rnn_data_generation']['dataloader']
     data_cfg = cfg['data']
-
+    #Chọn checkpoint của Base Model
     checkpoint_path = args.checkpoint_path if args.checkpoint_path else cfg['rnn_data_generation']['base_checkpoint_to_use']
 
+    # 2. Thiết lập thư mục log và các file inference raw
     log_dir = Path(data_cfg['logs'])
     train_pkl_path = log_dir / data_cfg['train_inference_raw_name']
     val_pkl_path = log_dir / data_cfg['val_inference_raw_name']
     test_pkl_path = log_dir / data_cfg['test_inference_raw_name']
+    # 3. Thư mục chứa annotation gốc (đã tiền xử lý)
     processed_dir = Path(data_cfg['processed_dir'])
     train_anno_dir = processed_dir / "train" / "annotations"
     val_anno_dir = processed_dir / "val" / "annotations"
     test_anno_dir = processed_dir / "test" / "annotations"
+    # 4. Thư mục đích lưu dữ liệu RNN đã xử lý
     rnn_base_dir = Path(data_cfg['rnn_processed_data'])
     rnn_train_data_dir = rnn_base_dir / "train"
     rnn_val_data_dir = rnn_base_dir / "val"
@@ -89,12 +92,15 @@ def main(cfg, args):
     print(f"Loading base model checkpoint: {checkpoint_path}")
 
     model = base_detector.TemporalActionDetector(num_classes=num_classes, window_size=window_size)
+    # Tạo một mô hình TemporalActionDetector với số lớp hành động và độ dài cửa sổ thời gian theo cấu hình.
     model = model.to(device)
+    # Đưa mô hình vừa tạo lên thiết bị đã chọn (CPU hoặc GPU) để chạy nhanh hơn.
 
     if Path(checkpoint_path).exists():
         print(f"Loading checkpoint")
         try:
-            checkpoint = torch.load(checkpoint_path, map_location=device)
+            checkpoint = torch.load(checkpoint_path, map_location=device) #map_location cpu máy 1 và gpu máy 2 đều chạy được
+            #state_dict là một dictionary (từ điển) lưu toàn bộ tham số (weights và biases)
             if 'model_state_dict' in checkpoint: state_dict = checkpoint['model_state_dict']
             elif 'state_dict' in checkpoint: state_dict = checkpoint['state_dict']
             else: state_dict = checkpoint
@@ -169,7 +175,7 @@ def main(cfg, args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate raw data for RNN Post-Processor using a trained base model.")
     parser.add_argument('--config', default='configs/config.yaml', help='Path to configuration file')
-    parser.add_argument("--checkpoint_path", type=str, default=None, help="Override base model checkpoint path from config")
+    parser.add_argument("--checkpoint_path", type=str, default=None, help="Override base model checkpoint path from config") #đường dẫn tới checkpoint file để ghi đè giá trị từ config
     
     args = parser.parse_args()
     
@@ -183,4 +189,4 @@ if __name__ == "__main__":
         print(f"loading config file: {e}")
         exit()
         
-    main(cfg, args) 
+    main(cfg, args) #gọi hàm chính

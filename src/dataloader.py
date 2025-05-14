@@ -71,7 +71,7 @@ class FullVideoDataset(Dataset):
             if action_end < start_idx or action_start >= end_idx:
                 continue  # No overlap
                 
-            rel_start = max(0, action_start - start_idx)
+            rel_start = max(0, action_start - start_idx) (0-32)
             rel_end = min(end_idx - start_idx, action_end - start_idx)
             
             if rel_end > rel_start:
