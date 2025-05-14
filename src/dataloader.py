@@ -108,23 +108,9 @@ class FullVideoDataset(Dataset):
         pose_npz = np.load(pose_path)
         all_pose = pose_npz['pose']
         
-        if end_idx <= all_frames.shape[0]:
-            frames = all_frames[start_idx:end_idx]
-        else:
-            frames = np.zeros((self.window_size, *all_frames.shape[1:]), dtype=all_frames.dtype)
-            actual_frames = all_frames[start_idx:end_idx]
-            frames[:actual_frames.shape[0]] = actual_frames
-            if actual_frames.shape[0] > 0:
-                frames[actual_frames.shape[0]:] = actual_frames[-1]
+        frames = all_frames[start_idx:end_idx]
         
-        if end_idx <= all_pose.shape[0]:
-            pose_data = all_pose[start_idx:end_idx]
-        else:
-            pose_data = np.zeros((self.window_size, all_pose.shape[1]), dtype=all_pose.dtype)
-            actual_pose = all_pose[start_idx:end_idx]
-            pose_data[:actual_pose.shape[0]] = actual_pose
-            if actual_pose.shape[0] > 0:
-                pose_data[actual_pose.shape[0]:] = actual_pose[-1]
+        pose_data = all_pose[start_idx:end_idx]
         
         velocity_data = feature_extraction.compute_velocity(pose_data)
         
