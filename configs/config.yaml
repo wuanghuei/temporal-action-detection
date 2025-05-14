@@ -3,7 +3,7 @@
 # Global settings
 global:
   project_name: TemporalActionDetection
-  seed: 42
+  seed: 42 #giữ cố định các trọng só để kết quả không bị thay đổi mỗi lần chạy model -> dễ so sánh (42 là meme hehe)
   num_classes: 5
   window_size: 32 # Used by base model dataloader & training
   device: cuda
@@ -82,7 +82,7 @@ rnn_data_generation:
   dataloader:
     train_batch_size: 4
     val_batch_size: 8
-    num_workers: 0
+    num_workers: 0 #số tiến trình chạy song song
 
 # RNN Model Training
 rnn_training:

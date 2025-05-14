@@ -7,16 +7,16 @@ import pickle
 from collections import defaultdict
 from tqdm import tqdm
 
-
 def find_nearest_subsampled_idx(original_idx, frame_indices):
     """Find the nearest subsampled frame index to the original frame index"""
-    differences = np.abs(np.array(frame_indices) - original_idx)
-    nearest_idx = np.argmin(differences)
+    differences = np.abs(np.array(frame_indices) - original_idx) #ép biến list frame_indices thành mảng array -> - original_idx(idx gốc)
+    #original_idx lấy từ start_frame và end_frame
+    nearest_idx = np.argmin(differences) #lấy số nhỏ nhất trong array (gần nhất với idx gốc)
     return int(nearest_idx)  
 
-def gaussian_kernel(center, window_size, sigma=1.0):
+def gaussian_kernel(center, window_size, sigma=1.0): #sử dụng gaussian_kernel để làm mờ nhãn bên ngoài hành động -> cải thiện khi train model
     x = torch.arange(window_size).float()
-    return torch.exp(-((x - center) ** 2) / (2 * sigma**2))
+    return torch.exp(-((x - center) ** 2) / (2 * sigma**2))  #(exp là e mũ x)
 
 
 def set_seed(seed=42):

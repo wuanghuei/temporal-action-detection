@@ -7,7 +7,7 @@ from contextlib import nullcontext
 
 class TemporalActionDetector(nn.Module):
     def __init__(self, num_classes=6, window_size=32, dropout=0.3):
-        super().__init__()
+        super().__init__() #kế thừa nn.Module(mang những đặc tính của torch)#khởi tạo self._module và self._parameter
         self.num_classes = num_classes
         self.window_size = window_size
         

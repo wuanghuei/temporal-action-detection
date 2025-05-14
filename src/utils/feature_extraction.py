@@ -15,14 +15,14 @@ def extract_pose_features(frame, pose_detector):
     return np.array(pose_landmarks)
 
 
-def compute_velocity(pose_data):
-    T, D = pose_data.shape
-    velocity = np.zeros_like(pose_data)
+def compute_velocity(pose_data): #TxD
+    T, D = pose_data.shape 
+    velocity = np.zeros_like(pose_data) #(zeros_like không cần phải nhập T,D nữa, tạo mảng 0 vs shape y hệt pose_data)
 
-    if T > 1:
-        velocity[1:] = pose_data[1:] - pose_data[:-1]
-
-    max_abs_val = np.max(np.abs(velocity)) + 1e-10
-    velocity = velocity / max_abs_val
+    if T > 1: #Tính từ frame thứ hai
+        velocity[1:] = pose_data[1:] - pose_data[:-1] # trừ các điểm keypoint từ các frame #phép trừ thành phần của mảng trong numpy
+#                    tính frame thứ hai  -  frame đầu tiên -> gần cuối
+    max_abs_val = np.max(np.abs(velocity)) + 1e-10 #Lấy điểm lớn nhất giá trị tuyệt đối và tránh chia hết cho 0
+    velocity = velocity / max_abs_val #Normalization -> ép nhỏ lại ->tiết kiệm thông số tính toán 
 
     return velocity
