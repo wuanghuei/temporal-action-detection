@@ -10,12 +10,12 @@ global:
 
 # Data Paths
 data:
-  base_dir: data
+  base_dir: Data
   # Raw data input directories
-  raw_video_dir: data/Videos_MERL_Shopping_Dataset
-  raw_label_dir: data/Labels_MERL_Shopping_Dataset
+  raw_video_dir: Data/Videos_MERL_Shopping_Dataset
+  raw_label_dir: Data/Labels_MERL_Shopping_Dataset
   # Processed data output/input directories
-  processed_dir: data/full_videos # Contains frames_npz, annotations_json, pose_npz
+  processed_dir: Data/full_videos # Contains frames_npz, annotations_json, pose_npz
   base_model_checkpoints: checkpoints
   rnn_model_checkpoints: rnn_checkpoints
   rnn_processed_data: rnn_processed_data
@@ -115,6 +115,6 @@ pipeline_evaluation:
   visualization:
     enabled: False # Set to True and provide details below to generate visualization
     video_id: null # Specify a video ID like 'subject1_session1_crop'
-    frames_npz_template: data/full_videos/test/frames/{video_id}_frames.npz
+    frames_npz_template: Data/full_videos/test/frames/{video_id}_frames.npz
     output_video_path: logs/visualization_{video_id}.mp4
     fps: 15 

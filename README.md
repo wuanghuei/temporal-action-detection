@@ -20,21 +20,22 @@ This project is based on the MERL Shopping Dataset.
 ├── checkpoints/              # Stores base model checkpoint files (created during training)
 ├── rnn_checkpoints/          # Stores RNN model checkpoint files (created during training)
 ├── rnn_processed_data/       # Processed data for RNN (created by generate_rnn_data.py)
+├── scripts/                  # Scripts to run different steps of the pipeline
+│   ├── preprocess_raw_data.py # Preprocess original videos -> frames npz, annotations json
+│   ├── extract_pose_features.py # Extract pose features -> pose npz
+│   ├── train_base_model.py   # Train the base TemporalActionDetector model
+│   ├── generate_rnn_data.py  # Generate RNN input data from base model results
+│   ├── train_rnn.py          # Train the RNN post-processor model
+│   └── evaluate_pipeline.py  # Evaluate the entire pipeline (base + RNN)
 └── src/                      # Main source code (model definitions, dataloader, utils, ...)
     ├── models/               # Model class definitions
     ├── utils/                # Utility functions (helpers, metrics, postprocessing, ...)
     ├── dataloader.py         # Dataset and DataLoader definitions for the base model
     ├── evaluation.py         # Function for calculating aggregate metrics
     └── losses.py             # Loss function class definitions
-├── preprocess_raw_data.py # Preprocess original videos -> frames npz, annotations json
-├── extract_pose_features.py # Extract pose features -> pose npz
-├── train_base_model.py   # Train the base TemporalActionDetector model
-├── generate_rnn_data.py  # Generate RNN input data from base model results
-├── train_rnn.py          # Train the RNN post-processor model
-├── evaluate_pipeline.py  # Evaluate the entire pipeline (base + RNN)
 ```
 
-**(Note:** The `data/` and `logs/` directories mentioned in the setup steps are expected to be created manually or by running the preprocessing/training scripts respectively. They are not part of the initial repository structure).**
+**(Note:** The `Data/` and `logs/` directories mentioned in the setup steps are expected to be created manually or by running the preprocessing/training scripts respectively. They are not part of the initial repository structure).**
 
 ## Installation
 
@@ -51,8 +52,8 @@ This project is based on the MERL Shopping Dataset.
     pip install -r requirements.txt
     ```
 3.  **Prepare data:**
-    *   Place the original MERL Shopping Dataset videos and labels into `data/Videos_MERL_Shopping_Dataset` and `data/Labels_MERL_Shopping_Dataset` respectively, following the train/test structure.
-    *   The preprocessing scripts will generate data in `data/full_videos`.
+    *   Place the original MERL Shopping Dataset videos and labels into `Data/Videos_MERL_Shopping_Dataset` and `Data/Labels_MERL_Shopping_Dataset` respectively, following the train/test structure.
+    *   The preprocessing scripts will generate data in `Data/full_videos`.
 4.  **Configure the pipeline:**
     *   Edit `configs/config.yaml` to set paths, hyperparameters, and other settings for the different components (data loading, base model, RNN model, training parameters). Refer to the comments within the file for guidance.
 
