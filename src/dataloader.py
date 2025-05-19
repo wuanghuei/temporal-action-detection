@@ -137,10 +137,7 @@ class FullVideoDataset(Dataset):
             
             start_mask[action_id] += helpers.gaussian_kernel(s, self.window_size, sigma=2.0)
             end_mask[action_id] += helpers.gaussian_kernel(e-1, self.window_size, sigma=2.0)
-            
-        start_mask = torch.clamp(start_mask, 0, 1)
-        end_mask = torch.clamp(end_mask, 0, 1)
-        
+                   
         metadata = {
             "video_id": video_id,
             "start_idx": start_idx,
